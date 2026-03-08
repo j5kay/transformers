@@ -202,6 +202,9 @@ def _convert_type_hints_to_json_schema(func: Callable) -> dict:
     for param_name, param_type in type_hints.items():
         if param_name == implicit_arg_name:
             continue
+        # [JK] Filter out "reserved" params
+        if param_name in ['_state', 'framework']:
+            continue
         properties[param_name] = _parse_type_hint(param_type)
 
     schema = {"type": "object", "properties": properties}
